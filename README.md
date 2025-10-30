@@ -6,7 +6,7 @@ We replace the original PyTorch MLP policy network (`Linear_QNet`) with a **Penn
 - Replaced the original `Linear_QNet` with a Variational Quantum Circuit (VQC) backbone (`model_vqc.py`)
 - Added render option - for the purpose of reducing delay in VQC
 - Exposed knobs: n_qubits, layers, device_name.
-- Recommended start: n_qubits=4~6, layers=1~2.
+- Recommended start: n_qubits=4\~6, layers=1\~2.
 
 **Circuit sketch (per layer):**
 - Input preprocessing: `LayerNorm -> Linear(in_dim -> n_qubits) -> Tanh`.
