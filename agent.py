@@ -3,7 +3,8 @@ import random
 import numpy as np
 from collections import deque
 from game import SnakeGameAI, Direction, Point
-from model import Linear_QNet, QTrainer
+# from model import Linear_QNet, QTrainer
+from model_vqc import Linear_QNet, QTrainer
 from helper import plot
 
 MAX_MEMORY = 100_000
@@ -106,7 +107,8 @@ def train():
     total_score = 0
     record = 0
     agent = Agent()
-    game = SnakeGameAI()
+    # game = SnakeGameAI(render=False)
+    game = SnakeGameAI() # 게임 화면 키기, Rendering True
     while True:
         # get old state
         state_old = agent.get_state(game)
