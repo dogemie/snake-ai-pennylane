@@ -1,6 +1,6 @@
 # model_vqc.py
 import os
-import time
+# import time
 import torch
 import torch.nn as nn
 import pennylane as qml
@@ -108,7 +108,7 @@ class QTrainer:
     def train_step(self, state, action, reward, next_state, done):
         # state = torch.tensor(state, dtype=torch.float)
         state = torch.from_numpy(np.asarray(state, dtype=np.float32))
-        next_state = torch.tensor(next_state, dtype=torch.float)
+        next_state = torch.from_numpy(np.asarray(next_state, dtype=np.float32))
         action = torch.tensor(action, dtype=torch.long)
         reward = torch.tensor(reward, dtype=torch.float)
         # (n, x)
