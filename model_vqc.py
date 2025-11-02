@@ -10,7 +10,7 @@ import torch.nn.functional as F
 
 
 class _VQCBackbone(nn.Module):
-    def __init__(self, in_dim: int, n_qubits: int = 6, layers: int = 2, device_name: str = "lightning.qubit"):
+    def __init__(self, in_dim: int, n_qubits: int = 16, layers: int = 2, device_name: str = "lightning.qubit"):
         super().__init__()
         self.in_dim = in_dim
         self.n_qubits = n_qubits
@@ -41,7 +41,8 @@ class _VQCBackbone(nn.Module):
                     qml.CNOT(wires=[w, w + 1])
                 qml.CNOT(wires=[self.n_qubits - 1, 0])
 
-            return [qml.expval(qml.PauliZ(w)) for w in range(self.n_qubits)]
+            return [qml.expval(qml.PauliZ(w)) for w in range(self.n_qubits)] + \
+                [qml.expval(qml.PauliX(w)) for w in range(self.n_qubits)]
 
         # TorchLayer
         self.q_layer = qml.qnn.TorchLayer(circuit, weight_shapes)
@@ -51,6 +52,11 @@ class _VQCBackbone(nn.Module):
             nn.Linear(in_dim, n_qubits),
             nn.Tanh(),
         )
+        
+        for name, p in self.q_layer.named_parameters():
+            if p.requires_grad:
+                nn.init.normal_(p, mean=0.0, std=0.01)
+
 
     def forward(self, x: torch.Tensor):
         x_small = self.pre(x).to(dtype=torch.float32)
@@ -77,14 +83,20 @@ class _VQCBackbone(nn.Module):
 
 class Linear_QNet(nn.Module):
     def __init__(self, input_size: int, hidden_size: int, output_size: int,
-                    n_qubits: int = 6, layers: int = 2, device_name: str = "lightning.qubit"):
+                    n_qubits: int = 12, layers: int = 2, device_name: str = "lightning.qubit"):
         super().__init__()
         self.vqc = _VQCBackbone(input_size, n_qubits=n_qubits, layers=layers, device_name=device_name)
 
         self.head = nn.Sequential(
-            nn.Linear(n_qubits, 16), nn.Tanh(),
-            nn.Linear(16, output_size)
+            nn.Linear(2*n_qubits, 64),
+            nn.ReLU(),
+            nn.Linear(64, output_size)
         )
+        
+        for m in self.head:
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_uniform_(m.weight, nonlinearity="relu")
+                nn.init.zeros_(m.bias)
 
     def forward(self, x):
         z = self.vqc(x)

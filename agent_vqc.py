@@ -3,13 +3,13 @@ import random
 import numpy as np
 from collections import deque
 from game import SnakeGameAI, Direction, Point
-from model import Linear_QNet, QTrainer
-# from model_vqc import Linear_QNet, QTrainer
+# from model import Linear_QNet, QTrainer
+from model_vqc import Linear_QNet, QTrainer
 from helper import plot
 
 MAX_MEMORY = 100_000
-BATCH_SIZE = 1000
-LR = 0.001
+BATCH_SIZE = 64  #1000
+LR = 5e-4       #0.01
 
 class Agent:
 
