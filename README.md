@@ -12,7 +12,6 @@ We replace the original PyTorch MLP policy network (`Linear_QNet`) with a **Penn
 - Input preprocessing: `LayerNorm -> Linear(in_dim -> n_qubits) -> Tanh`.
 - Data re-uploading: for each qubit `w`, apply `RX(x_w * W_in[l,w,0])` and `RY(x_w * W_in[l,w,1])`.
 - Trainable single-qubit rotations: `RX/RY/RZ(W_rot[l,w,*])`.
-- Ring entanglement: CNOT chain `0->1->…->n-1->0`.
 - Measurement: <Z> on each qubit -> feature dim = `n_qubits`.
 
 ## Quick Start
