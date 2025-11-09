@@ -18,6 +18,10 @@ We replace the original PyTorch MLP policy network (`Linear_QNet`) with a **Penn
 pip install torch numpy pygame matplotlib ipython pennylane pennylane-lightning
 python agent.py
 
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![PennyLane](https://img.shields.io/badge/PennyLane-Quantum-purple)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 
 # Teach AI To Play Snake! Reinforcement Learning With PyTorch and Pygame
 
